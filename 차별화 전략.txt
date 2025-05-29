@@ -1,0 +1,90 @@
+### 지금 시장에 이미 **“텍스트 + 그림 + 나레이션”** 패키지는 깔려 있습니다
+
+Storytime AI는 앱 안에서 이름·캐릭터 넣고 영상을 뽑아 주고, 주 1회 무료 크레딧·배지까지 줍니다 ([storytimeaiapp.com][1], [구글 플레이][2]). 원더블리는 종이책·선물 포장까지 풀커머스로 묶어 10 년 넘게 달리고 있고요 ([wonderbly.com][3], [wonderbly.com][4]). **같은 기능을 ‘더 저렴하게’만으론 차별화가 불가능**합니다.
+
+아래 8가지는 실제로 구현 난이도‑vs‑임팩트를 따져 **“6 개월 MVP → 18 개월 확장”** 로드맵 형태로 제안한 아이디어입니다.
+
+---
+
+## 1. ‘진짜 내 목소리’ + ‘내 얼굴’ 모드 (퍼스널 아이덴티티 극대화) — 6 주 MVP
+
+| 단계 | 구현 포인트                                                                                                    |
+| -- | --------------------------------------------------------------------------------------------------------- |
+| 음성 | **ElevenLabs Voice Cloning API**(≈ \$5/모델)로 부모·아이 목소리 1‑분 샘플만 받아 클론. 챕터별 대사 태그에 따라 화자 지정.                 |
+| 얼굴 | 사진 3 장 업로드 → **DreamBooth / LoRA** 로 캐릭터 변환 후 mid‑journey 스타일 템플릿에 삽입. GPU 8 GB 1 인스턴스로 10 분 내 fine‑tune. |
+| UX | “녹음 → 미리듣기 → 동의” COPPA 플로우 내장; 서버 측은 음성·이미지 임시 보관 30 일 정책.                                                |
+
+> **경쟁 앱이 못 하는 부분**: 내레이션은 대부분 TTS 기본 음색, 얼굴은 프롬프트에 이름 삽입 정도가 끝.
+
+---
+
+## 2. **AI 작곡 BGM + 동적 SFX** — 8 주
+
+* **API 스택**: Suno TTS Music 혹은 Stable Audio → 10 \~ 15 초 루프 트랙 생성.
+* **타이밍 동기화**: 장면별 keyword 감정(score: joy, suspense) tagging → 자동 베이스라인 변주.
+* **부가 가치**: 영상·오디오북 형태로 바로 YouTube Kids 업로드 가능.
+
+---
+
+## 3. **읽기 레벨 적응형 분기** — 12 주
+
+1. 챕터를 Lexile 지수 세 단계(↓, =, ↑)로 미리 생성·캐싱.
+2. 아이가 마이크로 읽으면 **Whisper V3**로 실시간 음독 정확도(단어 오류율) 측정.
+3. 정확도 ≥ 90 %면 난이도 ↑ 분기, 낮으면 동일/↓.
+   → 게임처럼 **“레벨‑업” 피드백** 제공.
+   (에듀테크 B2B 세일즈 지렛대)
+
+---
+
+## 4. **부모‑아이 Co‑Creation 캔버스** — 6 주
+
+* 웹 UI에서 문장·이미지 박스 drag‑and‑drop 재배열 ⇒ 최종 PDF/EPUB 내보내기.
+* **우려**: 작가·삽화가에게 “AI가 추억 뺏는다” 비판 → **“공동 창작”** 메시지로 대응. ([The Scottish Sun][5])
+
+---
+
+## 5. **AR 컷‑스루 페이지** — 16 주
+
+* On‑device **WebAR (8th Wall, Lens Studio)** 로 카메라 비추면 캐릭터가 방 안에 튀어나옴.
+* 출판사와 제휴해 실물 그림책에 QR/AR 마커 인쇄 → O2O(온라인→오프라인) 트래픽.
+
+---
+
+## 6. **다국어 Code‑Switch & 즉시 번역** — 4 주
+
+* GPT‑4o 번역 + 로컬화 Glossary. 한국어 기본, 영어·일본어·베트남어 추가.
+* 문장 단위로 언어 전환 옵션 → **이중 언어 교육** 니즈 공략.
+
+---
+
+## 7. **안전·윤리 ‘Trust Layer’** — 지속
+
+* GPT content‑filter + 자체 blacklist + human review queue 0.3 % 샘플링.
+* Parents Dashboard: 생성 로그, 신고 버튼, 데이터 삭제. **‘안심’이 곧 차별화**.
+
+---
+
+## 8. **IP / 브랜드 파트너 템플릿** — 18 주
+
+* 인기 웹툰·캐릭터사와 **Rev‑share 계약** → “뽀로로 우주탐험 편” 같은 스킨 팩.
+* 템플릿당 로열티 10 \~ 20 % 지급, 대신 월 구독 업셀 기회.
+
+---
+
+### 빠른 우선순위 제안
+
+| 우선 | 기능                   | 왜 먼저?                        |
+| -- | -------------------- | ---------------------------- |
+| 1  | **Voice + Face 개인화** | 설치형 GPU 한 대면 가능, 체감 임팩트 圧도적  |
+| 2  | **읽기 레벨 적응**         | 교육 시장에 바로 demo 가능 → B2B 레버리지 |
+| 3  | **Music/SFX**        | 이미지 비용 절감과 무관, UX 환기 요소      |
+
+**3 개월 내 위 3개 데모** ⇒ 초기 투자자·파트너 피칭 → 6 개월 차에 AR/브랜드 추가로 **콘텐츠 플랫폼** 포지셔닝 완성.
+
+> 핵심은 **“아이만의 몰입감 + 학습 가치 + 부모 안심”** 세 박자. 기능이 아니라 **경험**을 차별화하세요.
+
+[1]: https://storytimeaiapp.com/?utm_source=chatgpt.com "Storytime AI: Story Generator Mobile App"
+[2]: https://play.google.com/store/apps/details?hl=en_US&id=com.app.storytimeai&utm_source=chatgpt.com "Storytime AI: Story Generator - Apps on Google Play"
+[3]: https://www.wonderbly.com/?srsltid=AfmBOornn1tFE0OPkNlXB6RZP1K5ZUInD4266mcGddTeUDQH0xLqS3HN&utm_source=chatgpt.com "Wonderbly: Personalized Books For Kids & Adults"
+[4]: https://www.wonderbly.com/personalized-books?srsltid=AfmBOor5eoijiAGjzbxWuAgY9DfVucn4dGflEEK1CexAgbu_lcNVNV7j&utm_source=chatgpt.com "All personalized books | Wonderbly"
+[5]: https://www.thescottishsun.co.uk/news/14595927/ai-bedtime-stories-rob-parents-kids-memories/?utm_source=chatgpt.com "Rise of AI bedtime stories will rob parents and children of precious memories, warn top kids' authors"
